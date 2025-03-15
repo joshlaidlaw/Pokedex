@@ -1,3 +1,19 @@
+## Pokémon Pokédex
+
+### Build & Serve instructions for Docker
+
+To build the docker image run:
+
+`docker build . -f .Dockerfile -t pokedex`
+
+To serve the iamge run:
+
+`docker run -d -p 8080:80 pokedex`
+
+The application will be available at `http://localhost:8000`
+
+--- 
+
 ## AgencyAnalytics Frontend React Challenge!
 
 Below are the pieces of technology that we have added into this repository for you with a little description.
