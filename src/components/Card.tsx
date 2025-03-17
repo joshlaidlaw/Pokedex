@@ -6,10 +6,8 @@ type PokemonCard = {
 }
 
 function Card( {name}: PokemonCard) {
-
-  const {loading, data, error } = useFetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-  const imageIURL = data?.sprites.other["official-artwork"].front_default || ''
-
+  const { data } = useFetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+  const imageIURL = (data && 'sprites' in data && data.sprites.other["official-artwork"].front_default) || ''
 
   return (
     <div className="relative p-3 flex flex-col border border-slate-300 rounded-sm bg-slate-50 hover:border-blue-800 hover:drop-shadow-md">

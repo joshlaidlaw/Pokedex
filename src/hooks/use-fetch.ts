@@ -1,17 +1,51 @@
 import { useState, useEffect } from "react";
 
-export type PokemonDetail = {
+type PokemonDetail = {
   order: number;
   name: string;
-  types: object[];
-  sprites: object[];
-  stats:  object[];
-  abilities: object[];
+  types: { type: { name: string, url: string } }[];
+  sprites: {
+    other: {
+      "official-artwork": {
+        front_default: string;
+      };
+    };
+  };
+  stats: {
+    stat: {
+      name: string;
+    },
+    base_stat: number;
+  }[];
+  abilities: { ability: { name: string, url: string } }[];
 }
 
-const useFetch = (url: string) => {
+type PokemonResults = {
+  name?: string;
+  count: number;
+  results: { name: string }[]
+}
+
+type TypeDetail = {
+  name?: string;
+  pokemon: {
+    pokemon: {
+      name: string;
+    }
+  }[]
+}
+
+type Results = PokemonDetail & TypeDetail & PokemonResults | null
+
+interface UseFetchResult<T> {
+  data: T | Results;
+  loading: boolean;
+  error: string | null | unknown;
+}
+
+const useFetch = <T extends Results>(url: string): UseFetchResult<T> => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [data, setData] = useState<null | { count?: number, results?: {name: string}[] } | PokemonDetail>(null);
+  const [data, setData] = useState<Results>(null);
   const [error, setError] = useState<null | Error | unknown>(null);
 
   useEffect(() => {
@@ -19,16 +53,17 @@ const useFetch = (url: string) => {
     const fetchData = async () => {
       try {
         const response = await fetch(url);
-        let data = {}
-        if (!response.ok) { 
+        let data = null
+        if (!response.ok) {
           setError(Error(`Error ${response.status}: ${response.statusText}`))
         }
 
-        if(response.status !== 404) {
+        if (response.status !== 404) {
           data = await response.json();
         }
 
-        setData(data);
+        setData(data)
+
       } catch (err) {
         setError(err);
       } finally {

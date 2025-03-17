@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import useFetch, { PokemonDetail } from "../hooks/use-fetch"
+import useFetch from "../hooks/use-fetch"
 import BreadCrumbs from "./BreadCrumbs";
 import Card from "./Card";
 

@@ -1,10 +1,10 @@
 import { Link, useParams } from "react-router";
-import useFetch, { PokemonDetail } from "../hooks/use-fetch"
+import useFetch from "../hooks/use-fetch"
 import BreadCrumbs from "./BreadCrumbs";
 
 function PokemonDetails() {
   const  { name } = useParams()
-  const {loading, data, error} = useFetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  const {loading, data, error} = useFetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
 
   const formatStat = (s: string) => { 
     const edgeCases = new Set(['hp'])
@@ -22,11 +22,11 @@ function PokemonDetails() {
       <BreadCrumbs />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 col-start-2 col-end-3 ">
         <div>
-          <img src={data && data.sprites.other["official-artwork"].front_default} alt={`Image of ${name}`} className="bg-zinc-300 rounded-b-sm w-full"/>
+          <img src={data ? data.sprites.other["official-artwork"].front_default : undefined} alt={`Image of ${name}`} className="bg-zinc-300 rounded-b-sm w-full"/>
         </div>
         <div>
           <div className="">
-            <p className="text-zinc-400 text-sm">#{data && data.order}</p>
+            <p className="text-zinc-400 text-sm">#{data && 'order' in data ? data.order : ''}</p>
             <h2 className="text-zinc-950 text-3xl capitalize font-bold">{data && data.name}</h2>
             <div className="flex flex-row gap-2 border-b-1 border-b-zinc-400 my-5 pb-5">
               {data && data.types.map((type) => {
