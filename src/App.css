@@ -1,2 +1,5 @@
-main {
+@import "tailwindcss";
+
+body {
+  background:  var(--color-zinc-200);
 }
