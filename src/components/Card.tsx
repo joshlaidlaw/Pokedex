@@ -1,16 +1,24 @@
 import { Link } from "react-router"
+import useFetch from "../hooks/use-fetch";
 
 type PokemonCard = {
   name: string;
-  imgURL: string;
 }
 
-function Card( {name, imgURL}: PokemonCard) {
+function Card( {name}: PokemonCard) {
+
+  const {loading, data, error } = useFetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+  const imageIURL = data?.sprites.other["official-artwork"].front_default || ''
+
+
   return (
-    <div className="p-3 flex flex-col border border-slate-300 rounded-sm bg-slate-50">
-      <img src={imgURL} alt={`Photo of ${name}`} className="h-53 w-auto mb-2" />
+    <div className="relative p-3 flex flex-col border border-slate-300 rounded-sm bg-slate-50 hover:border-blue-800 hover:drop-shadow-md">
+      <img src={imageIURL} alt={`Photo of ${name}`} className="mb-2 aspect-square bg-zinc-300 " />
        <Link to={`/pokemon/${name}`}>
-        <h2 className="mb-2 text-lg font-bold capitalize">{name}</h2>
+        <h2 className="mb-2 text-lg font-bold capitalize">
+          <span className="absolute inset-0 z-10"></span>
+          {name}
+        </h2>
       </Link>
     </div>
   )

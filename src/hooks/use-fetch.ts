@@ -1,19 +1,33 @@
 import { useState, useEffect } from "react";
 
+export type PokemonDetail = {
+  order: number;
+  name: string;
+  types: object[];
+  sprites: object[];
+  stats:  object[];
+  abilities: object[];
+}
+
 const useFetch = (url: string) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [data, setData] = useState<null | object>(null);
+  const [data, setData] = useState<null | { count?: number, results?: {name: string}[] } | PokemonDetail>(null);
   const [error, setError] = useState<null | Error | unknown>(null);
 
   useEffect(() => {
-    // const controller = new AbortController();
+    const controller = new AbortController();
     const fetchData = async () => {
       try {
         const response = await fetch(url);
-        if (!response.ok) {
+        let data = {}
+        if (!response.ok) { 
           setError(Error(`Error ${response.status}: ${response.statusText}`))
         }
-        const data = await response.json();
+
+        if(response.status !== 404) {
+          data = await response.json();
+        }
+
         setData(data);
       } catch (err) {
         setError(err);
@@ -24,7 +38,7 @@ const useFetch = (url: string) => {
 
     fetchData();
 
-    // return () => controller.abort();
+    return () => controller.abort();
   }, [url]);
 
   return { loading, data, error };
